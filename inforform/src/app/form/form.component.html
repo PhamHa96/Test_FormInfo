@@ -1,0 +1,128 @@
+<div class="main-form text-center">
+    <form class="form-signin" #formInfo="ngForm" (ngSubmit)="submitSend(formInfo)">
+        <h1 class="h3 mb-3 font-weight-normal">LIÊN HỆ</h1>
+        <label for="inputName" class="sr-only">Họ và tên</label>
+        <input 
+            type="text" 
+            id="inputName" 
+            class="form-control" 
+            placeholder="Họ và tên.." 
+            [(ngModel)]="info.name" 
+            name="name" 
+            #name="ngModel"
+            minlength="3"
+            required
+            pattern="[^a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]"
+            autofocus>
+        <div *ngIf="name.dirty && name.errors?.required"  class="alert alert-danger">
+            <strong>Danger!</strong> Vui long nhap ten cua ban!
+        </div>
+        <div *ngIf="name.errors?.pattern"  class="alert alert-danger">
+            <strong>Danger!</strong> Vui long khong nhap ky tu dac biet!
+        </div>
+        <div *ngIf="name.errors?.minlength"  class="alert alert-danger">
+            <strong>Danger!</strong> Vui long nhap ten >= 3 ky tu!
+        </div>
+        <label for="inputPhone" class="sr-only">Số điện thoại</label>
+        <input 
+            type="text" 
+            id="inputPhone" 
+            class="form-control" 
+            placeholder="Số điện thoại.." 
+            [(ngModel)]="info.phone" 
+            name="phone"
+            #phone="ngModel"
+            pattern="\d+"
+            maxlength="10"
+            minlength="10"
+            required>
+        <div *ngIf="phone.dirty && phone.errors?.required"  class="alert alert-danger">
+            <strong>Danger!</strong> Vui lòng nhập số điện thoại!
+        </div>
+        <div *ngIf="phone.errors?.pattern"  class="alert alert-danger">
+            <strong>Danger!</strong> Vui lòng chỉ nhập ký tự số!
+        </div>
+        <div *ngIf="phone.errors?.minlength || phone.errors?.maxlength "  class="alert alert-danger">
+            <strong>Danger!</strong> Số điện thoại phải có 10 ký tự!
+        </div>
+        <ejs-datepicker 
+            class="form-control"  
+            id='datepicker' 
+            [value]='value' 
+            [max]='maxDate'
+            type="date" 
+            id="inputBday" 
+            placeholder="Ngày sinh.." 
+            [(ngModel)]="info.bday" 
+            name="bday" 
+            #bday="ngModel"
+            required
+            > 
+        </ejs-datepicker>
+        <div *ngIf="bday.dirty && bday.errors?.required && info.bday=='' "  class="alert alert-danger">
+            <strong>Danger!</strong> Vui long chon ngay sinh!
+        </div>
+        <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <input 
+                class="form-control"
+                accept="image/*" 
+                style="margin-top:24px;" 
+                (change)="handleFileInput($event.target.files)" 
+                [(ngModel)]="info.urlId" 
+                name="urlId"
+                #urlId="ngModel"
+                type="file"
+                required 
+                />
+        </div>
+        <div *ngIf="urlId.dirty && info.urlId.value == '' " class="alert alert-danger">
+            <strong>Danger!</strong> Vui long chon anh CMND!
+        </div>
+        <div *ngIf="!checkSizeImg" class="alert alert-danger">
+            <strong>Danger!</strong> Vui lòng chọn ảnh có dung lượng nhỏ hơn 2Mb!
+        </div>
+        <div *ngIf="!checkWidthHeightImg" class="alert alert-danger">
+            <strong>Danger!</strong> Vui lòng chọn ảnh có kích thước lớn hơn 250x150!
+        </div>
+        <div>
+            <img 
+                [src]="srcImg" 
+                class="img-responsive imgCMND" 
+                alt="ImageCMND"
+                id="Img"
+            >
+        </div>
+        </div>
+        <label for="inputMessage" class="sr-only">Nội dung</label>
+        <textarea
+            minlength="10"
+            maxlength="100" 
+            type="text" 
+            id="inputMessage" 
+            class="form-control" 
+            placeholder="Nội dung.." 
+            [(ngModel)]="info.message" 
+            name="message"
+            #message="ngModel"
+            required></textarea>
+        <div *ngIf="message.dirty && message.errors?.required"  class="alert alert-danger">
+            <strong>Danger!</strong> Vui long nhap noi dung!
+        </div>
+        <div *ngIf="message.errors?.minlength"  class="alert alert-danger">
+            <strong>Danger!</strong> Vui long nhap lon hon 10 ky tu!
+        </div>
+        <div *ngIf="message.errors?.maxlength"  class="alert alert-danger">
+            <strong>Danger!</strong> Vui long nhap it hon 100 ky tu!
+        </div>
+        <button [disabled]="formInfo.invalid || !checkSizeImg || !checkWidthHeightImg" class="btn btn-primary" type="submit"> Gửi</button>
+        <button type="button" class="btn btn-danger" (click)="onResetForm(formInfo)"> Hủy</button>
+        <div *ngIf="isSuccessPost" class="alert alert-success titleSuccess">
+            <strong>Success send info!</strong>
+        </div>
+        <div *ngIf="isFailPost" class="alert alert alert-danger titleFail">
+            <strong>{{this.messErr}}</strong>
+        </div>
+    </form>
+  
+</div>
